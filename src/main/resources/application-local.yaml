@@ -1,6 +1,0 @@
-spring:
-  kafka:
-    consumer:
-      bootstrap-servers: local.wsl:9092
-    producer:
-      bootstrap-servers: local.wsl:9092
