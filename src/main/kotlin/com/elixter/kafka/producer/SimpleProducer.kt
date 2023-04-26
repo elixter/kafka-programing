@@ -1,5 +1,6 @@
 package com.elixter.kafka.producer
 
+import com.elixter.kafka.partitioner.CustomPartitioner
 import mu.KLogging
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -14,13 +15,14 @@ class SimpleProducer {
             it[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = BOOTSTRAP_SERVER
             it[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.name
             it[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java.name
+            it[ProducerConfig.PARTITIONER_CLASS_CONFIG] = CustomPartitioner::class.java.name
         }
 
         val producer = KafkaProducer<String, String>(configs)
 
         val messageValue = "testMessage"
-        val record = ProducerRecord<String, String>(TOPIC_NAME, messageValue)
-        producer.send(record)
+        val record = ProducerRecord<String, String>(TOPIC_NAME, "Pangyo", messageValue)
+        producer.send(record, ProducerAsyncCallback())
             .also {
                 logger.info { "metadata: ${it.get()}, record: $record" }
             }
